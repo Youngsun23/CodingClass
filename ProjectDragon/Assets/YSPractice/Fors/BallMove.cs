@@ -38,6 +38,10 @@ public class BallMove : MonoBehaviour
         }
 
         transform.Translate(position * moveSpeed * Time.deltaTime, Space.Self);
+
+        // Ray 를 캐릭터의 아래 방향으로 쏴서.
+        // 레이가 충돌 된 오브젝트의 Layer 값을 기억해두고.
+        // 기억해둔 layer 값과 새로 이번 프레임에 레이를 쏴서 얻은 Layer 값과 다르면. 다른 지형에 올라온 것으로 판단할 수 있음
     }
 
         private void OnTriggerEnter(Collider trigger)
