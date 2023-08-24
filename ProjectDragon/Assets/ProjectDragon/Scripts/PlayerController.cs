@@ -71,6 +71,7 @@ public class PlayerController : MonoBehaviour
         //for (int i = 0; i < detectedColliders.Length; i++)
         //{
         //    detectedObjectList.Add(detectedColliders[i].gameObject);
+            
         //}
         #endregion
 

@@ -29,7 +29,7 @@ public class ClearOver : MonoBehaviour
             overMenu.gameObject.SetActive(true);
         }
 
-        if(currentScore>=3)
+        if(currentScore>=1)
         {
             Time.timeScale = 0f;
             clearMenu.gameObject.SetActive(true);
