@@ -75,7 +75,6 @@ public class PlayerController : MonoBehaviour
         //}
         #endregion
 
-
     }
 
     private void Update_Movement()

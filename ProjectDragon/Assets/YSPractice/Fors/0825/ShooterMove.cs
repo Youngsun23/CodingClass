@@ -13,6 +13,10 @@ public class ShooterMove : MonoBehaviour
     private float currentSpawnTime = 0;
     public float spawnCoolTime;
 
+    // public Vector3 upMove;
+    // public Vector3 downMove;
+     public float shootAngle=10f; // unity에서 각도 개념 ?
+
     private void Update()
     {
         Update_Movement();
@@ -22,6 +26,19 @@ public class ShooterMove : MonoBehaviour
                 Shoot();
             }
 
+        if (Input.GetKey(KeyCode.R))
+        {
+            // upMove =new Vector3(0, 0.1f, 0);
+            // transform.rotation=Quaternion.Euler(0,0.1f,0);
+            shootAngle = 10f;
+        }
+
+        if (Input.GetKey(KeyCode.F))
+        {
+            // downMove = new Vector3(0, -0.1f, 0);
+            // transform.rotation=Quaternion.Euler(0,-0.1f,0);
+            shootAngle = -10f;
+        }
     }
 
 
@@ -33,7 +50,9 @@ public class ShooterMove : MonoBehaviour
 
         var newInstance = Instantiate(bullet);
         newInstance.transform.position = spawnPoint.position;
+        // var newInstance=Instantiate(bullet, spawnPoint.position, Quaternion.??);
         newInstance.SetActive(true);
+        
     }
 
 
