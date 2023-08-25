@@ -21,9 +21,9 @@ public class BulletMove : MonoBehaviour
 
     private void Update()
     {
-        Vector3 rotationVector = Quaternion.Euler(0f, shooterMove.shootAngle, 0f) * Vector3.forward;
+        //Vector3 rotationVector = Quaternion.Euler(0f, shooterMove.shootAngle, 0f) * Vector3.forward;
         // Vector3 moveDirection = shooter.transform.forward+shooterMove.upMove+shooterMove.downMove;
-        Vector3 moveDirection = shooter.transform.forward + rotationVector;
+        Vector3 moveDirection = shooter.transform.forward /*+ rotationVector*/;
             /* (Quaternion.Euler(0f,shooterMove.shootAngle,0f))*/
         Vector3 gravity=new Vector3(0,-0.01f,0);
         rb.velocity = moveDirection * bulletSpeed+gravity;

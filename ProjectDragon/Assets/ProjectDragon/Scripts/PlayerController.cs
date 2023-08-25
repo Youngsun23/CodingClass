@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
         //Gizmos.DrawWireSphere(transform.position, 10f);
 
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, detectionRadius);        
+        Gizmos.DrawWireSphere(transform.position, detectionRadius);
     }
 
     public float moveSpeed;
@@ -27,9 +27,22 @@ public class PlayerController : MonoBehaviour
     private float buffedSpeedRate = 1;
     private TriggerGate currentGate;
 
+
+    public Transform firePosition;
+    public Bullet bulletPrefab;
+    public float fireRate;
+    public float angleSpeed;
+
+    private float fireAngle;
+    private float lastFireTime;
+
+
+    public int iterationStep = 30;
+
     private void Update()
     {
         Update_Movement();
+        Update_FireControl();
 
         detectedObjectList.Clear();
 
@@ -71,10 +84,53 @@ public class PlayerController : MonoBehaviour
         //for (int i = 0; i < detectedColliders.Length; i++)
         //{
         //    detectedObjectList.Add(detectedColliders[i].gameObject);
-            
+
         //}
         #endregion
 
+        #region 포물선 운동 궤적 그려보기 #1
+        //Vector3 previousPoint = firePosition.position;
+        //Vector3 nextPoint = firePosition.position;
+        //for (int i = 1; i <= iterationStep; i++)
+        //{
+        //    float simulationTime = i / (float)iterationStep;
+        //    nextPoint += 
+        //        (bulletPrefab.speed * firePosition.forward) + 
+        //        (Vector3.up * bulletPrefab.gravity * simulationTime * simulationTime / 2f);
+        //    Debug.DrawLine(previousPoint, nextPoint);
+        //    previousPoint = nextPoint;
+        //}
+        #endregion
+
+        
+    }
+
+    private void Update_FireControl()
+    {
+        if (Input.GetKey(KeyCode.Space))
+        {
+            if (Time.time > lastFireTime + fireRate)
+            {
+                var newBullet = Instantiate(bulletPrefab);
+                newBullet.transform.position = firePosition.position;
+                newBullet.transform.rotation = firePosition.rotation;
+                newBullet.gameObject.SetActive(true);
+
+                lastFireTime = Time.time;
+            }
+        }
+
+        if (Input.GetKey(KeyCode.R))
+        {
+            fireAngle -= angleSpeed * Time.deltaTime;
+            firePosition.localRotation = Quaternion.Euler(fireAngle, 0, 0);
+        }
+
+        if (Input.GetKey(KeyCode.F))
+        {
+            fireAngle += angleSpeed * Time.deltaTime;
+            firePosition.localRotation = Quaternion.Euler(fireAngle, 0, 0);
+        }
     }
 
     private void Update_Movement()
