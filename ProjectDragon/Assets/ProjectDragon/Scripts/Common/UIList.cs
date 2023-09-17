@@ -12,7 +12,7 @@ namespace Dragon
         //===========================================================
         SCENE_POPUP,
 
-
+        IngameExitPopupUI,
 
 
         MAX_SCENE_POPUP,

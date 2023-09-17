@@ -53,6 +53,11 @@ namespace Dragon
         {
             ammoText.text = $"{current} / {max}";
         }
+
+        public void OnClickMenuButton()
+        {
+            UIManager.Show<IngameExitPopupUI>(UIList.IngameExitPopupUI);
+        }
     }
 }
 
