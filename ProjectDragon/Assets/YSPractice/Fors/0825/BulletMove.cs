@@ -19,6 +19,7 @@
 //        shooterMove=GetComponent<ShooterMove>();
 //    }
 
+<<<<<<< HEAD
 //    private void Update()
 //    {
 //        Vector3 rotationVector = Quaternion.Euler(0f, shooterMove.shootAngle, 0f) * Vector3.forward;
@@ -29,6 +30,18 @@
 //        rb.velocity = moveDirection * bulletSpeed+gravity;
 //        bulletMoveDistance = bulletSpeed * (Time.time - startTime);
 //        Debug.Log(transform.position);
+=======
+    private void Update()
+    {
+        //Vector3 rotationVector = Quaternion.Euler(0f, shooterMove.shootAngle, 0f) * Vector3.forward;
+        // Vector3 moveDirection = shooter.transform.forward+shooterMove.upMove+shooterMove.downMove;
+        Vector3 moveDirection = shooter.transform.forward /*+ rotationVector*/;
+            /* (Quaternion.Euler(0f,shooterMove.shootAngle,0f))*/
+        Vector3 gravity=new Vector3(0,-0.01f,0);
+        rb.velocity = moveDirection * bulletSpeed+gravity;
+        bulletMoveDistance = bulletSpeed * (Time.time - startTime);
+        Debug.Log(transform.position);
+>>>>>>> 8103eadaf3c5c5d1187f4b1446b61c6f01a6924d
 
 //        if (Time.time - startTime >= 5f)
 //        {
