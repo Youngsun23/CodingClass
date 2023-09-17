@@ -2,7 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TriggerGate : MonoBehaviour
+namespace Dragon
 {
-    public float damage;
+    public class TriggerGate : MonoBehaviour
+    {
+        public float damage;
+    }
 }
+

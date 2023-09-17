@@ -2,7 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Ground : MonoBehaviour
+namespace Dragon
 {
-    public float speedRate;
+    public class Ground : MonoBehaviour
+    {
+        public float speedRate;
+    }
 }
+

@@ -2,39 +2,42 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bullet : MonoBehaviour
+namespace Dragon
 {
-    public float speed;
-    public float range;
-    public float lifeTime;
-    public float gravity;
-
-    private Vector3 startPosition;
-    private float startTime;
-
-    private void Start()
+    public class Bullet : MonoBehaviour
     {
-        startPosition = transform.position;
-        startTime = Time.time;
-    }
+        public float speed;
+        public float range;
+        public float lifeTime;
+        public float gravity;
 
-    private void Update()
-    {
-        if (Time.time > startTime + lifeTime)
+        private Vector3 startPosition;
+        private float startTime;
+
+        private void Start()
         {
-            Destroy(gameObject);
-            return;
+            startPosition = transform.position;
+            startTime = Time.time;
         }
 
-        if (Vector3.Distance(startPosition, transform.position) > range)
+        private void Update()
         {
-            Destroy(gameObject);
-            return;
+            if (Time.time > startTime + lifeTime)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            if (Vector3.Distance(startPosition, transform.position) > range)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            Vector3 movement = transform.position + (transform.forward * speed * Time.deltaTime);
+            movement.y += gravity * Time.deltaTime;
+
+            transform.position = movement;
         }
-
-        Vector3 movement = transform.position + (transform.forward * speed * Time.deltaTime);
-        movement.y += gravity * Time.deltaTime;
-
-        transform.position = movement;
     }
 }
