@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,9 @@ namespace Dragon
 {
     public class PlayerController : MonoBehaviour
     {
+        public static PlayerController Instance { get; private set; }
+
+
         private void OnDrawGizmos()
         {
             //Gizmos.color = Color.red;
@@ -19,6 +23,7 @@ namespace Dragon
         public float moveSpeed;
         public float rotationSpeed;
         public float currentHP;
+        public float maxHP;
 
         public float raycastRange;
         public int raycastAccuracy = 1;
@@ -35,11 +40,26 @@ namespace Dragon
         public float fireRate;
         public float angleSpeed;
 
+        public int maxAmmo;
+        public int curAmmo;
+
         private float fireAngle;
         private float lastFireTime;
-
-
         public int iterationStep = 30;
+
+
+        public event Action<float, float> OnChangedHP;
+        public event Action<int, int> OnChangedAmmo;
+
+        private void Awake()
+        {
+            Instance = this;
+        }
+
+        private void OnDestroy()
+        {
+            Instance = null;
+        }
 
         private void Update()
         {
@@ -113,12 +133,29 @@ namespace Dragon
             {
                 if (Time.time > lastFireTime + fireRate)
                 {
-                    var newBullet = Instantiate(bulletPrefab);
-                    newBullet.transform.position = firePosition.position;
-                    newBullet.transform.rotation = firePosition.rotation;
-                    newBullet.gameObject.SetActive(true);
+                    if (curAmmo > 0)
+                    {
+                        var newBullet = Instantiate(bulletPrefab);
+                        newBullet.transform.position = firePosition.position;
+                        newBullet.transform.rotation = firePosition.rotation;
+                        newBullet.gameObject.SetActive(true);
 
-                    lastFireTime = Time.time;
+                        lastFireTime = Time.time;
+                        curAmmo--;
+                        OnChangedAmmo?.Invoke(curAmmo, maxAmmo);
+
+                        if (curAmmo <= 0)
+                        {
+                            StartCoroutine(DelayedReload());
+                            IEnumerator DelayedReload()
+                            {
+                                yield return new WaitForSeconds(3f);
+
+                                curAmmo = maxAmmo;
+                                OnChangedAmmo?.Invoke(curAmmo, maxAmmo);
+                            }
+                        }
+                    }
                 }
             }
 
@@ -207,6 +244,8 @@ namespace Dragon
 
                     currentGate = gate;
                     currentHP -= gate.damage;
+
+                    OnChangedHP?.Invoke(currentHP, maxHP);
                 }
             }
         }
