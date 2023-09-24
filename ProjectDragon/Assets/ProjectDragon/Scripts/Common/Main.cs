@@ -34,10 +34,12 @@ namespace Dragon
             yield return new WaitForEndOfFrame();
 
             UIManager.Singleton.Initialize();
+            UIManager.Show<LoadingUI>(UIList.LoadingUI);
 
             var loadIngameAsync = SceneManager.LoadSceneAsync("Ingame");
             yield return new WaitUntil(() => loadIngameAsync.isDone);
 
+            UIManager.Hide<LoadingUI>(UIList.LoadingUI);
             UIManager.Show<IngameUI>(UIList.IngameUI);
         }
     }

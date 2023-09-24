@@ -13,6 +13,7 @@ namespace Dragon
         SCENE_POPUP,
 
         IngameExitPopupUI,
+        LoadingUI,
 
 
         MAX_SCENE_POPUP,
