@@ -17,6 +17,10 @@ namespace Dragon
         private Vector3 prevMousePosition;
         private Vector2 mouseChangeDelta;
 
+        private List<InteractionBase> currentInteractableObjects = new List<InteractionBase>();
+        private bool isInteractable_Tree = false;
+        private bool isInteractable_Rock = false;
+
         private void Start()
         {
             characterController = GetComponent<CharacterController>();
@@ -51,6 +55,15 @@ namespace Dragon
             prevMousePosition = Input.mousePosition;
 
             OnInputMovement();
+
+            if (Input.GetKey(KeyCode.F))
+            {
+                OnInputInteraction();
+            }
+            else
+            {
+                characterController.SetActionAnimation(0);
+            }
         }
 
         void OnInputMovement()
@@ -58,6 +71,71 @@ namespace Dragon
             characterController.SetMovementAnimation(movement.magnitude);
             characterController.SetMovementTransform(new Vector3(movement.x, 0, movement.y));
             characterController.SetRotate(transform.rotation.eulerAngles.y + (mouseChangeDelta.x * Time.deltaTime * cameraRotateXSpeed));
+        }
+
+
+        void OnInputInteraction()
+        {
+            if (!isInteractable_Tree && !isInteractable_Rock)
+            {
+                characterController.SetActionAnimation(0);
+                return;
+            }
+
+            if (isInteractable_Tree)
+            {
+                characterController.SetActionAnimation(3);
+            }
+            else if (isInteractable_Rock)
+            {
+                characterController.SetActionAnimation(2);
+            }
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.transform.TryGetComponent<InteractionBase>(out var interactionItem))
+            {
+                switch (interactionItem.InteractionObjectType)
+                {
+                    case IteractionObjectType.Tree:
+                        isInteractable_Tree = true;
+                        break;
+                    case IteractionObjectType.Rock:
+                        isInteractable_Rock = true;
+                        break;
+                }
+
+                currentInteractableObjects.Add(interactionItem);
+            }
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.transform.TryGetComponent<InteractionBase>(out var interactionItem))
+            {
+                currentInteractableObjects.Remove(interactionItem);
+
+                switch (interactionItem.InteractionObjectType)
+                {
+                    case IteractionObjectType.Tree:
+                        {
+                            if (false == currentInteractableObjects.Exists(x => x.InteractionObjectType == IteractionObjectType.Tree))
+                            {
+                                isInteractable_Tree = false;
+                            }
+                        }
+                        break;
+                    case IteractionObjectType.Rock:
+                        {
+                            if (false == currentInteractableObjects.Exists(x => x.InteractionObjectType == IteractionObjectType.Rock))
+                            {
+                                isInteractable_Rock = false;
+                            }
+                        }
+                        break;
+                }
+            }
         }
     }
 }
