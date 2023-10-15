@@ -16,6 +16,7 @@ namespace Dragon
         private Vector2 movement;
         private Vector3 prevMousePosition;
         private Vector2 mouseChangeDelta;
+        private bool isRun = false;
 
         private List<InteractionBase> currentInteractableObjects = new List<InteractionBase>();
         private bool isInteractable_Tree = false;
@@ -33,10 +34,15 @@ namespace Dragon
             {
                 visibleMouseCorsor = true;
             }
+
             if (Input.GetMouseButtonDown(0))
             {
                 visibleMouseCorsor = false;
             }
+
+            isRun = Input.GetKey(KeyCode.LeftShift);
+            characterController.IsRunning = isRun;
+
             UnityEngine.Cursor.visible = visibleMouseCorsor;
             UnityEngine.Cursor.lockState = visibleMouseCorsor ? CursorLockMode.Locked : CursorLockMode.None;
 
@@ -68,9 +74,19 @@ namespace Dragon
 
         void OnInputMovement()
         {
-            characterController.SetMovementAnimation(movement.magnitude);
+            float magnitude = movement.magnitude * (isRun ? 1 : 0.5f);
+            characterController.SetMovementAnimation(magnitude);
             characterController.SetMovementTransform(new Vector3(movement.x, 0, movement.y));
-            characterController.SetRotate(transform.rotation.eulerAngles.y + (mouseChangeDelta.x * Time.deltaTime * cameraRotateXSpeed));
+
+            if (magnitude > 0)
+            {
+                characterController.SetRotate(transform.rotation.eulerAngles.y + (mouseChangeDelta.x * Time.deltaTime * cameraRotateXSpeed));
+                CameraController.Instance.SetCameraActive(IngameCameraType.FollowCamera);
+            }
+            else
+            {
+                CameraController.Instance.SetCameraActive(IngameCameraType.FreelookCamera);
+            }
         }
 
 

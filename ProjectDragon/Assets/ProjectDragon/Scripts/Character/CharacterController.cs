@@ -6,8 +6,11 @@ namespace Dragon
 {
     public class CharacterController : MonoBehaviour
     {
+        public bool IsRunning { get; set; } = false;
+
         [SerializeField] private Animator characterAnimator;
-        [SerializeField] private float movementSpeed = 1f;
+        [SerializeField] private float walkSpeed = 1f;
+        [SerializeField] private float runSpeed = 2f;
 
         [SerializeField] private Transform rightHandItemRoot;
         [SerializeField] private InteractionItemCollection itemCollection;
@@ -16,7 +19,8 @@ namespace Dragon
 
         public void SetMovementTransform(Vector3 movement)
         {
-            transform.Translate(movement * movementSpeed * Time.deltaTime);
+            float speed = IsRunning ? runSpeed : walkSpeed;
+            transform.Translate(movement * speed * Time.deltaTime);
         }
 
         public void SetRotate(float angle)
