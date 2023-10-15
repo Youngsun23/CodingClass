@@ -35,9 +35,20 @@ namespace Dragon
         [SerializeField] private Transform popupRoot;
 
         private const string UI_PATH = "UI/Prefab/";
+        private bool isInitialized = false;
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        public static void PrepareInitialize()
+        {
+            UIManager.Singleton.Initialize();
+        }
 
         public void Initialize()
         {
+            if (isInitialized)
+                return;
+
+            isInitialized = true;
             if (panelRoot == null)
             {
                 GameObject goPanelRoot = new GameObject("Panel Root");

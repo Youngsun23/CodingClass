@@ -12,7 +12,7 @@ namespace Dragon
         [SerializeField] private bool visibleMouseCorsor = true;
         [SerializeField] private float cameraRotateXSpeed = 1f;
 
-        private CharacterController characterController;
+        private CharacterBase characterController;
         private Vector2 movement;
         private Vector3 prevMousePosition;
         private Vector2 mouseChangeDelta;
@@ -24,8 +24,12 @@ namespace Dragon
 
         private void Start()
         {
-            characterController = GetComponent<CharacterController>();
+            characterController = GetComponent<CharacterBase>();
             prevMousePosition = Input.mousePosition;
+
+            var ingameUI = UIManager.Singleton.GetUI<IngameUI>(UIList.IngameUI);
+            ingameUI.SetHealth(100, 100);
+            ingameUI.SetStamina(100, 100);
         }
 
         private void Update()
@@ -70,6 +74,14 @@ namespace Dragon
             {
                 characterController.SetActionAnimation(0);
             }
+        }
+
+        private void LateUpdate()
+        {
+            float currentStamina = characterController.StaminaPoint;
+
+            var ingameUI = UIManager.Singleton.GetUI<IngameUI>(UIList.IngameUI);
+            ingameUI.SetStamina(currentStamina, 100f);
         }
 
         void OnInputMovement()
@@ -119,6 +131,9 @@ namespace Dragon
                         break;
                     case IteractionObjectType.Rock:
                         isInteractable_Rock = true;
+                        break;
+                    case IteractionObjectType.Character:
+                        interactionItem.OnInteraction();
                         break;
                 }
 

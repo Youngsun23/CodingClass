@@ -1,63 +1,33 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Dragon
 {
     public class IngameUI : UIBase
     {
-        public Image hpBar;
-        public TextMeshProUGUI hpText;
-        public TextMeshProUGUI ammoText;
+        [SerializeField] private Image healthBar;
+        [SerializeField] private TextMeshProUGUI healthText;
 
-        private void OnEnable()
+        [SerializeField] private Image staminaBar;
+        [SerializeField] private TextMeshProUGUI staminaText;
+
+
+        public void SetHealth(float current, float max)
         {
-            if (PlayerController.Instance)
-            {
-                PlayerController.Instance.OnChangedHP += SetHealth;
-                PlayerController.Instance.OnChangedAmmo += SetAmmoText;
-
-                SetHealth(PlayerController.Instance.currentHP, PlayerController.Instance.maxHP);
-                SetAmmoText(PlayerController.Instance.curAmmo, PlayerController.Instance.maxAmmo);
-            }
+            healthBar.fillAmount = current / max;
+            healthText.text = $"{current:0.0} / {max:0.0}";
         }
 
-        private void OnDisable()
+        public void SetStamina(float current, float max)
         {
-            if (PlayerController.Instance)
-            {
-                PlayerController.Instance.OnChangedHP -= SetHealth;
-                PlayerController.Instance.OnChangedAmmo -= SetAmmoText;
-            }
+            staminaBar.fillAmount = current / max;
+            staminaText.text = $"{current:0.0} / {max:0.0}";
         }
 
-        public void SetHealth(float cur, float max)
-        {
-            SetHealthBar(cur / max);
-            SetHealthText(cur, max);
-        }
 
-        public void SetHealthBar(float value)
-        {
-            hpBar.fillAmount = value;
-        }
-
-        public void SetHealthText(float current, float max)
-        {
-            hpText.text = $"{current:0.0} / {max:0.0}";
-        }
-
-        public void SetAmmoText(int current, int max)
-        {
-            ammoText.text = $"{current} / {max}";
-        }
-
-        public void OnClickMenuButton()
-        {
-            UIManager.Show<IngameExitPopupUI>(UIList.IngameExitPopupUI);
-        }
     }
 }
 

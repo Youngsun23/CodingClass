@@ -9,12 +9,14 @@ namespace Dragon
         None = 0,
         Tree,
         Rock,
+
+        Character,
     }
 
     public class InteractionBase : MonoBehaviour
     {
-        [field: SerializeField] public IteractionObjectType InteractionObjectType { get; private set; }
+        [field: SerializeField] public virtual IteractionObjectType InteractionObjectType { get; protected set; }
 
-
+        public virtual void OnInteraction() { }
     }
 }

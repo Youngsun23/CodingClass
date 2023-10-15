@@ -1,12 +1,31 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Dragon
 {
-    public class CharacterController : MonoBehaviour
+    public class CharacterBase : MonoBehaviour
     {
         public bool IsRunning { get; set; } = false;
+
+        /// <summary>
+        /// public float HealthPoint 
+        /// { 
+        ///     get
+        ///     {
+        ///         return healthPoint;
+        ///     } 
+        /// }
+        /// </summary>
+        public float HealthPoint => healthPoint;
+        public float StaminaPoint => staminaPoint;
+
+
+        [SerializeField] private float healthPoint;
+        [SerializeField] private float staminaPoint;
+        [SerializeField] private float staminaRecoveryPoint;
+
 
         [SerializeField] private Animator characterAnimator;
         [SerializeField] private float walkSpeed = 1f;
@@ -17,9 +36,27 @@ namespace Dragon
 
         private GameObject currentHandleItem;
 
+        private void Update()
+        {
+            if (staminaPoint < 100f && !IsRunning)
+            {
+                staminaPoint += staminaRecoveryPoint * Time.deltaTime;
+                staminaPoint = Mathf.Clamp(staminaPoint, 0, 100);
+            }
+        }
+
         public void SetMovementTransform(Vector3 movement)
         {
             float speed = IsRunning ? runSpeed : walkSpeed;
+            if (IsRunning)
+            {
+                staminaPoint -= 1 * Time.deltaTime;
+                if (staminaPoint <= 0)
+                {
+                    speed = walkSpeed;
+                }
+            }
+
             transform.Translate(movement * speed * Time.deltaTime);
         }
 
@@ -74,6 +111,11 @@ namespace Dragon
                     break;
 
             }
+        }
+
+        public void OnInteracted()
+        {
+            characterAnimator.SetTrigger("Trigger_EmotionGreeting");
         }
     }
 }
