@@ -12,7 +12,7 @@ namespace Dragon
         [SerializeField] private bool visibleMouseCorsor = true;
         [SerializeField] private float cameraRotateXSpeed = 1f;
 
-        private CharacterBase characterController;
+        private CharacterBase linkedCharacter;
         private Vector2 movement;
         private Vector3 prevMousePosition;
         private Vector2 mouseChangeDelta;
@@ -24,7 +24,7 @@ namespace Dragon
 
         private void Start()
         {
-            characterController = GetComponent<CharacterBase>();
+            linkedCharacter = GetComponent<CharacterBase>();
             prevMousePosition = Input.mousePosition;
 
             var ingameUI = UIManager.Singleton.GetUI<IngameUI>(UIList.IngameUI);
@@ -45,7 +45,7 @@ namespace Dragon
             }
 
             isRun = Input.GetKey(KeyCode.LeftShift);
-            characterController.IsRunning = isRun;
+            linkedCharacter.IsRunning = isRun;
 
             UnityEngine.Cursor.visible = visibleMouseCorsor;
             UnityEngine.Cursor.lockState = visibleMouseCorsor ? CursorLockMode.Locked : CursorLockMode.None;
@@ -72,14 +72,13 @@ namespace Dragon
             }
             else
             {
-                characterController.SetActionAnimation(0);
+                linkedCharacter.SetActionAnimation(0);
             }
         }
 
         private void LateUpdate()
         {
-            float currentStamina = characterController.StaminaPoint;
-
+            float currentStamina = linkedCharacter.StaminaPoint;
             var ingameUI = UIManager.Singleton.GetUI<IngameUI>(UIList.IngameUI);
             ingameUI.SetStamina(currentStamina, 100f);
         }
@@ -87,12 +86,12 @@ namespace Dragon
         void OnInputMovement()
         {
             float magnitude = movement.magnitude * (isRun ? 1 : 0.5f);
-            characterController.SetMovementAnimation(magnitude);
-            characterController.SetMovementTransform(new Vector3(movement.x, 0, movement.y));
+            linkedCharacter.SetMovementAnimation(magnitude);
+            linkedCharacter.SetMovementTransform(new Vector3(movement.x, 0, movement.y));
 
             if (magnitude > 0)
             {
-                characterController.SetRotate(transform.rotation.eulerAngles.y + (mouseChangeDelta.x * Time.deltaTime * cameraRotateXSpeed));
+                linkedCharacter.SetRotate(transform.rotation.eulerAngles.y + (mouseChangeDelta.x * Time.deltaTime * cameraRotateXSpeed));
                 CameraController.Instance.SetCameraActive(IngameCameraType.FollowCamera);
             }
             else
@@ -106,17 +105,17 @@ namespace Dragon
         {
             if (!isInteractable_Tree && !isInteractable_Rock)
             {
-                characterController.SetActionAnimation(0);
+                linkedCharacter.SetActionAnimation(0);
                 return;
             }
 
             if (isInteractable_Tree)
             {
-                characterController.SetActionAnimation(3);
+                linkedCharacter.SetActionAnimation(3);
             }
             else if (isInteractable_Rock)
             {
-                characterController.SetActionAnimation(2);
+                linkedCharacter.SetActionAnimation(2);
             }
         }
 
