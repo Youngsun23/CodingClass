@@ -21,6 +21,11 @@ namespace Dragon
         private List<InteractionBase> currentInteractableObjects = new List<InteractionBase>();
         private bool isInteractable_Tree = false;
         private bool isInteractable_Rock = false;
+        private bool isInteractable_Earth = false;
+
+        private float diggingTime=3f;
+        private float curdiggingTime;
+        public GameObject Cube;
 
         private void Start()
         {
@@ -30,6 +35,8 @@ namespace Dragon
             var ingameUI = UIManager.Singleton.GetUI<IngameUI>(UIList.IngameUI);
             ingameUI.SetHealth(100, 100);
             ingameUI.SetStamina(100, 100);
+
+            curdiggingTime = diggingTime;
         }
 
         private void Update()
@@ -74,6 +81,7 @@ namespace Dragon
             {
                 linkedCharacter.SetActionAnimation(0);
             }
+
         }
 
         private void LateUpdate()
@@ -103,12 +111,11 @@ namespace Dragon
 
         void OnInputInteraction()
         {
-            if (!isInteractable_Tree && !isInteractable_Rock)
+            if (!isInteractable_Tree && !isInteractable_Rock && !isInteractable_Earth)
             {
                 linkedCharacter.SetActionAnimation(0);
                 return;
             }
-
             if (isInteractable_Tree)
             {
                 linkedCharacter.SetActionAnimation(3);
@@ -116,6 +123,21 @@ namespace Dragon
             else if (isInteractable_Rock)
             {
                 linkedCharacter.SetActionAnimation(2);
+            }
+            else if(isInteractable_Earth)
+            {
+                linkedCharacter.SetActionAnimation(1);
+                curdiggingTime -= 1f * Time.deltaTime;
+                if (curdiggingTime <= 0)
+                {
+                    Instantiate(Cube, transform.position, transform.rotation);
+                    curdiggingTime = diggingTime;
+                }
+                //문제// 큐브를 Rock으로 하면, f키 입력이 끝나도 삽이 안 사라짐
+            }
+            if(!isInteractable_Earth)
+            {
+                curdiggingTime = diggingTime;
             }
         }
 
@@ -133,6 +155,9 @@ namespace Dragon
                         break;
                     case IteractionObjectType.Character:
                         interactionItem.OnInteraction();
+                        break;
+                    case IteractionObjectType.Earth:
+                        isInteractable_Earth = true;
                         break;
                 }
 
@@ -161,6 +186,14 @@ namespace Dragon
                             if (false == currentInteractableObjects.Exists(x => x.InteractionObjectType == IteractionObjectType.Rock))
                             {
                                 isInteractable_Rock = false;
+                            }
+                        }
+                        break;
+                    case IteractionObjectType.Earth:
+                        {
+                            if (false == currentInteractableObjects.Exists(x => x.InteractionObjectType == IteractionObjectType.Earth))
+                            {
+                                isInteractable_Earth = false;
                             }
                         }
                         break;

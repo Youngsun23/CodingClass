@@ -9,6 +9,7 @@ namespace Dragon
         None = 0,
         Tree,
         Rock,
+        Earth,
 
         Character,
     }

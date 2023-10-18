@@ -56,7 +56,6 @@ namespace Dragon
                     speed = walkSpeed;
                 }
             }
-
             transform.Translate(movement * speed * Time.deltaTime);
         }
 
@@ -87,12 +86,15 @@ namespace Dragon
                         {
                             Destroy(currentHandleItem);
                             currentHandleItem = null;
+                            
                         }
                     }
                     break;
                 case 1: // »ðÁú
                     {
-
+                        var itemData = itemCollection.ItemCollection.Find(x => x.TargetObjectType == IteractionObjectType.Earth);
+                        var newHandItem = Instantiate(itemData.Prefab, rightHandItemRoot);
+                        currentHandleItem = newHandItem;
                     }
                     break;
                 case 2: // °î±ªÀÌ
