@@ -5,27 +5,26 @@ using UnityEngine;
 
 namespace Dragon
 {
+    public enum CharacterType
+    {
+        None = 0,
+        Player = 1,
+        NPC = 2,
+    }
+
     public class CharacterBase : MonoBehaviour
     {
-        public bool IsRunning { get; set; } = false;
+        public static List<CharacterBase> SpawnedCharacters = new List<CharacterBase>();
 
-        /// <summary>
-        /// public float HealthPoint 
-        /// { 
-        ///     get
-        ///     {
-        ///         return healthPoint;
-        ///     } 
-        /// }
-        /// </summary>
+        public bool IsRunning { get; set; } = false;
         public float HealthPoint => healthPoint;
         public float StaminaPoint => staminaPoint;
+        public CharacterType CharacterType => characterType;
 
 
         [SerializeField] private float healthPoint;
         [SerializeField] private float staminaPoint;
         [SerializeField] private float staminaRecoveryPoint;
-
 
         [SerializeField] private Animator characterAnimator;
         [SerializeField] private float walkSpeed = 1f;
@@ -33,8 +32,14 @@ namespace Dragon
 
         [SerializeField] private Transform rightHandItemRoot;
         [SerializeField] private InteractionItemCollection itemCollection;
+        [SerializeField] private CharacterType characterType;
 
         private GameObject currentHandleItem;
+
+        private void Awake()
+        {
+            SpawnedCharacters.Add(this);
+        }
 
         private void Update()
         {
@@ -82,37 +87,47 @@ namespace Dragon
             {
                 case 0:
                     {
-                        if (currentHandleItem)
-                        {
-                            Destroy(currentHandleItem);
-                            currentHandleItem = null;
-                            
-                        }
+                        ResetHandleItem();
                     }
                     break;
                 case 1: // »ðÁú
                     {
-                        var itemData = itemCollection.ItemCollection.Find(x => x.TargetObjectType == IteractionObjectType.Earth);
-                        var newHandItem = Instantiate(itemData.Prefab, rightHandItemRoot);
-                        currentHandleItem = newHandItem;
+                        SetHandleItem(InteractionObjectType.Earth);
                     }
                     break;
                 case 2: // °î±ªÀÌ
                     {
-                        var itemData = itemCollection.ItemCollection.Find(x => x.TargetObjectType == IteractionObjectType.Rock);
-                        var newHandItem = Instantiate(itemData.Prefab, rightHandItemRoot);
-                        currentHandleItem = newHandItem;
+                        SetHandleItem(InteractionObjectType.Rock);
                     }
                     break;
                 case 3: // µµ³¢
                     {
-                        var itemData = itemCollection.ItemCollection.Find(x => x.TargetObjectType == IteractionObjectType.Tree);
-                        var newHandItem = Instantiate(itemData.Prefab, rightHandItemRoot);
-                        currentHandleItem = newHandItem;
+                        SetHandleItem(InteractionObjectType.Tree);
                     }
                     break;
 
             }
+        }
+
+        private void ResetHandleItem()
+        {
+            if (currentHandleItem)
+            {
+                Destroy(currentHandleItem);
+                currentHandleItem = null;
+            }
+        }
+
+        private void SetHandleItem(InteractionObjectType type)
+        {
+            var itemData = itemCollection.ItemCollection.Find(x => x.TargetObjectType == type);
+            var newHandItem = Instantiate(itemData.Prefab, rightHandItemRoot);
+            if (currentHandleItem != newHandItem)
+            {
+                Destroy(currentHandleItem);
+                currentHandleItem = null;
+            }
+            currentHandleItem = newHandItem;
         }
 
         public void OnInteracted()

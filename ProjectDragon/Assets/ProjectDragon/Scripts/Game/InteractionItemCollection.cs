@@ -7,7 +7,7 @@ namespace Dragon
     [System.Serializable]
     public class InteractionItemData
     {
-        public IteractionObjectType TargetObjectType;
+        public InteractionObjectType TargetObjectType;
         public GameObject Prefab;
     }
 

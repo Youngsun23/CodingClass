@@ -104,7 +104,7 @@ namespace Dragon
             }
             else
             {
-                CameraController.Instance.SetCameraActive(IngameCameraType.FreelookCamera);
+                //CameraController.Instance.SetCameraActive(IngameCameraType.FreelookCamera);
             }
         }
 
@@ -147,16 +147,16 @@ namespace Dragon
             {
                 switch (interactionItem.InteractionObjectType)
                 {
-                    case IteractionObjectType.Tree:
+                    case InteractionObjectType.Tree:
                         isInteractable_Tree = true;
                         break;
-                    case IteractionObjectType.Rock:
+                    case InteractionObjectType.Rock:
                         isInteractable_Rock = true;
                         break;
-                    case IteractionObjectType.Character:
+                    case InteractionObjectType.Character:
                         interactionItem.OnInteraction();
                         break;
-                    case IteractionObjectType.Earth:
+                    case InteractionObjectType.Earth:
                         isInteractable_Earth = true;
                         break;
                 }
@@ -173,25 +173,25 @@ namespace Dragon
 
                 switch (interactionItem.InteractionObjectType)
                 {
-                    case IteractionObjectType.Tree:
+                    case InteractionObjectType.Tree:
                         {
-                            if (false == currentInteractableObjects.Exists(x => x.InteractionObjectType == IteractionObjectType.Tree))
+                            if (false == currentInteractableObjects.Exists(x => x.InteractionObjectType == InteractionObjectType.Tree))
                             {
                                 isInteractable_Tree = false;
                             }
                         }
                         break;
-                    case IteractionObjectType.Rock:
+                    case InteractionObjectType.Rock:
                         {
-                            if (false == currentInteractableObjects.Exists(x => x.InteractionObjectType == IteractionObjectType.Rock))
+                            if (false == currentInteractableObjects.Exists(x => x.InteractionObjectType == InteractionObjectType.Rock))
                             {
                                 isInteractable_Rock = false;
                             }
                         }
                         break;
-                    case IteractionObjectType.Earth:
+                    case InteractionObjectType.Earth:
                         {
-                            if (false == currentInteractableObjects.Exists(x => x.InteractionObjectType == IteractionObjectType.Earth))
+                            if (false == currentInteractableObjects.Exists(x => x.InteractionObjectType == InteractionObjectType.Earth))
                             {
                                 isInteractable_Earth = false;
                             }

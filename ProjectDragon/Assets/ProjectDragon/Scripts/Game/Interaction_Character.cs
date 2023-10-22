@@ -10,9 +10,9 @@ namespace Dragon
 
         // override => "재정의"
         // override 키워드를 사용해서 virtual 함수/변수를  재.정.의 해서 구현 할 수 있다.
-        public override IteractionObjectType InteractionObjectType
+        public override InteractionObjectType InteractionObjectType
         {
-            get => IteractionObjectType.Character;
+            get => InteractionObjectType.Character;
         }
 
         public override void OnInteraction()
