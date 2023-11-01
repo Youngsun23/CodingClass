@@ -109,6 +109,11 @@ namespace Dragon
             }
         }
 
+        public void SetTriggerEmotion()
+        {
+            characterAnimator.SetTrigger("Trigger_EmotionClap");
+        }
+
         private void ResetHandleItem()
         {
             if (currentHandleItem)

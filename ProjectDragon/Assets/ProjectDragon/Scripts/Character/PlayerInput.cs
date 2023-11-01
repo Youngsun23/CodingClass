@@ -82,6 +82,10 @@ namespace Dragon
                 linkedCharacter.SetActionAnimation(0);
             }
 
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                linkedCharacter.SetTriggerEmotion();
+            }
         }
 
         private void LateUpdate()
